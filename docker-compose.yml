@@ -1,0 +1,17 @@
+version: '3.6'
+services:
+  gitlab:
+    image: gitlab/gitlab-ee:latest
+    restart: always
+    hostname: 'localhost'
+    container_name: gitlab-local
+    ports:
+      - "8080:80"
+      - "8443:443"
+      - "8022:22"
+    environment:
+      GITLAB_ROOT_PASSWORD: "admin123"
+    volumes:
+      - ./config:/etc/gitlab
+      - ./logs:/var/log/gitlab
+      - ./data:/var/opt/gitlab
