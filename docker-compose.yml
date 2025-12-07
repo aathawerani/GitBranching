@@ -15,4 +15,6 @@ services:
       - ./config:/etc/gitlab
       - ./logs:/var/log/gitlab
       - ./data:/var/opt/gitlab
+      - ./java-sample-app:/workspace/java-sample-app
+
 
