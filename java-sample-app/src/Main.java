@@ -5,6 +5,6 @@ public class Main {
     }
 
     public static String greet(String name) {
-        return "Hello " + name + ", welcome to version 1.1.0!";
+        return "Hello " + name + ", welcome to version 1.0.1!";
     }
 }

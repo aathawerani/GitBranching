@@ -36,3 +36,9 @@ git push -u origin feature/personalized-greeting
 git checkout main
 git merge feature/personalized-greeting --no-ff
 git push origin main
+git add .
+git commit -m "Fixed wrong version labeling in greeting message"
+git push -u origin fix/wrong-version-output
+git checkout main
+git merge fix/wrong-version-output --no-ff
+git push origin main
