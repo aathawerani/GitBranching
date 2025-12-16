@@ -1,12 +1,13 @@
 version: '3.6'
+
 services:
   gitlab:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: always
-    hostname: 'localhost'
     container_name: gitlab-local
+    hostname: 'gitlab.local'
+    restart: always
     ports:
       - "8080:80"
       - "8443:443"
@@ -15,6 +16,39 @@ services:
       - ./config:/etc/gitlab
       - ./logs:/var/log/gitlab
       - ./data:/var/opt/gitlab
-      - ./java-sample-app:/workspace/java-sample-app
 
+  mattermost-db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: mattermost
+      POSTGRES_USER: mmuser
+      POSTGRES_PASSWORD: mmuser_password
+    volumes:
+      - mattermost-db:/var/lib/postgresql/data
 
+  mattermost:
+    image: mattermost/mattermost-team-edition:latest
+    restart: always
+    ports:
+      - "8065:8065"
+    depends_on:
+      - mattermost-db
+    environment:
+      - MM_SERVICESETTINGS_SITEURL=http://localhost:8065
+      - MM_SQLSETTINGS_DRIVERNAME=postgres
+      - MM_SQLSETTINGS_DATASOURCE=postgres://mmuser:mmuser_password@mattermost-db:5432/mattermost?sslmode=disable&connect_timeout=10
+    volumes:
+      - mattermost-data:/mattermost/data
+      - mattermost-config:/mattermost/config
+      - mattermost-logs:/mattermost/logs
+      - mattermost-plugins:/mattermost/plugins
+      - mattermost-client-plugins:/mattermost/client/plugins
+
+volumes:
+  mattermost-db:
+  mattermost-data:
+  mattermost-config:
+  mattermost-logs:
+  mattermost-plugins:
+  mattermost-client-plugins:
